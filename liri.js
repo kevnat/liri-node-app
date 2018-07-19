@@ -38,6 +38,7 @@ function thisSong(){
           return console.log('Error occurred: ' + err);
         } 
         let items = data.tracks.items;
+        // console.log(items);
         //first loop over top level to get items.name for song name
         for (var j = 0; j < items.length; j++){
             console.log("--------------------------------")
@@ -45,15 +46,16 @@ function thisSong(){
 
         //need to get to artists.name 
         //artists is an object within an array
-            for (var i = 0; i < items.length; i++){
-                let artists = items[i].artists;
+            // for (var i = 0; i < items.length; i++){
+                let artists = items[j].artists;
+                // console.log(artists);
                     //  console.log(artists[0].name); 
                 for (var k = 0; k < artists.length; k++){
                      console.log("Artist: " + artists[k].name);
-                     console.log("--------------------------------");
+                    //  console.log("--------------------------------");
                      break;
                  }
-             } 
+            // } 
             }  
         });   
     }
