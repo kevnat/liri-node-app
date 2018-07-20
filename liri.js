@@ -2,9 +2,10 @@ var env = require("dotenv").config();
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var request = require('request');
+var fs = require('fs');
 var keys = require('./keys');
 
-var cmd = process.argv[2];
+let cmd = process.argv[2];
 
 function getTweets(){
 var client = new Twitter({
@@ -26,7 +27,7 @@ var client = new Twitter({
   });
 }
 
-function thisSong(){
+function getSong(){
     var spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
@@ -98,23 +99,38 @@ request.get('http://www.omdbapi.com/?apikey=trilogy&t=' + movie, function (error
 });
 }
 
-switch (cmd){
-    case "my-tweets": 
-    //This will show your last 20 tweets and when they were created at in your terminal/bash window.
-    getTweets();
-    break;
-    case "spotify-this-song":
-    //This will show some information about the song in your terminal
-    thisSong();
-    break; 
-    case "movie-this":
-    //This will output some information to your terminal
-    getMovie();
-    break; 
-    case "do-what-it-says":
-    //Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-    break;
-    default: 
-    console.log("instructions...");
-
+function getText(){
+    fs.readFile('random.txt',"utf8", function(error,data){
+        if (error) throw error;
+        let dataArr = data.split(",");
+        let cmd = dataArr[0];
+        let input = dataArr[1];
+        console.log(cmd,input);
+    
+    })
 }
+
+function action(cmd,){
+    switch (cmd){
+        case "my-tweets": 
+        //This will show your last 20 tweets and when they were created at in your terminal/bash window.
+        getTweets();
+        break;
+        case "spotify-this-song":
+        //This will show some information about the song in your terminal
+        getSong();
+        break; 
+        case "movie-this":
+        //This will output some information to your terminal
+        getMovie();
+        break; 
+        case "do-what-it-says":
+        //Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
+        getText();
+        break;
+        default: 
+        console.log("instructions...");
+    }  
+}
+
+action();
