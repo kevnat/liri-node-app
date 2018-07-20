@@ -1,10 +1,10 @@
 var env = require("dotenv").config();
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+var request = require('request');
 var keys = require('./keys');
 
 var cmd = process.argv[2];
-let movie = process.argv[3];
 
 function getTweets(){
 var client = new Twitter({
@@ -60,6 +60,43 @@ function thisSong(){
         });   
     }
         
+function getMovie(){
+// * Title of the movie.
+// * Year the movie came out.
+// * IMDB Rating of the movie.
+// * Rotten Tomatoes Rating of the movie.
+// * Country where the movie was produced.
+// * Language of the movie.
+// * Plot of the movie.
+// * Actors in the movie.
+let movie = process.argv[3];
+
+request.get('http://www.omdbapi.com/?apikey=trilogy&t=' + movie, function (error, response, body) {
+    if (!error){
+        var body = JSON.parse(body); 
+        let title = body.Title; 
+        let year = body.Year;
+        let imdb = body.Ratings[1].Value; 
+        let rotten = body.Ratings[0].Value;
+        let country = body.Country;
+        let language = body.Language;
+        let plot = body.Plot;
+        let cast = body.Actors;
+    console.log(
+        "Body: " + title 
+    +   "\nYear: " + year 
+    +   "\nIMDB Rating: " + imdb
+    +   "\nRotten Tomatoes: " + rotten
+    +   "\nCountry: " + country
+    +   "\nLanguage: " + language
+    +   "\nPlot: " + plot
+    +   "\nCast: " + cast);
+    } else {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    } 
+});
+}
 
 switch (cmd){
     case "my-tweets": 
@@ -72,6 +109,7 @@ switch (cmd){
     break; 
     case "movie-this":
     //This will output some information to your terminal
+    getMovie();
     break; 
     case "do-what-it-says":
     //Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
