@@ -27,14 +27,14 @@ var client = new Twitter({
   });
 }
 
-function getSong(){
+function getSong(song){
     var spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
 
-    let title = process.argv[3];
-    spotify.search({ type:'track', query: title, market: 'US', limit: 5}, function(err, data) {
+    //let input = process.argv[3];
+    spotify.search({ type:'track', query: song, market: 'US', limit: 5}, function(err, data) {
         if (err){
           return console.log('Error occurred: ' + err);
         } 
@@ -61,16 +61,8 @@ function getSong(){
         });   
     }
         
-function getMovie(){
-// * Title of the movie.
-// * Year the movie came out.
-// * IMDB Rating of the movie.
-// * Rotten Tomatoes Rating of the movie.
-// * Country where the movie was produced.
-// * Language of the movie.
-// * Plot of the movie.
-// * Actors in the movie.
-let movie = process.argv[3];
+function getMovie(movie){
+// let movie = process.argv[3];
 
 request.get('http://www.omdbapi.com/?apikey=trilogy&t=' + movie, function (error, response, body) {
     if (!error){
@@ -106,11 +98,11 @@ function getText(){
         let cmd = dataArr[0];
         let input = dataArr[1];
         console.log(cmd,input);
-    
+        action(cmd,input);
     })
 }
 
-function action(cmd,){
+function action(cmd,input){
     switch (cmd){
         case "my-tweets": 
         //This will show your last 20 tweets and when they were created at in your terminal/bash window.
@@ -118,19 +110,19 @@ function action(cmd,){
         break;
         case "spotify-this-song":
         //This will show some information about the song in your terminal
-        getSong();
+        getSong(input);
         break; 
         case "movie-this":
         //This will output some information to your terminal
-        getMovie();
+        getMovie(input);
         break; 
         case "do-what-it-says":
         //Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-        getText();
+        getText(input);
         break;
         default: 
         console.log("instructions...");
     }  
 }
 
-action();
+action(cmd, process.argv[3]);
