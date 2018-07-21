@@ -13,9 +13,9 @@ Language Interpretation and Recognition Interface
 
 ## Read from file & Run
 ### random.txt Examples
-* ```my-tweets```
-* ```movie-this,<'movie name'>```
-* ```spotify-my-song, <'song name'>```
+```my-tweets
+movie-this,<'movie name'>
+spotify-my-song, <'song name'>```
 ### Run:
 ```node liri do-what-it-says```
 
